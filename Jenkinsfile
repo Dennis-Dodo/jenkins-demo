@@ -5,6 +5,11 @@ pipeline {
         jdk "JAVA_HOME"
     }
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Build') {
             steps {
                 git 'https://github.com/Dennis-Dodo/jenkins-demo.git'

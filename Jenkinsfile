@@ -1,6 +1,7 @@
 pipeline {
     agent any
-    tools {
+     tools {
+        // Install the Maven version configured as "M3" and add it to the path.
         jdk "JAVA_HOME"
     }
     stages {
@@ -14,21 +15,16 @@ pipeline {
         stage('Test') {
             steps {
                 sh './mvnw test'
-                stage('Unit Test') {
-                    steps {
-                        sh './mvnw test'
-                    }
-                }
-                stage('Integration Test') {
-                    steps {
-                        sh './mvnw verify -DskipUnitTests -Parq-wildfly-swarm'
-                    }
-                }
             }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
+        }
+        stage('Unit Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('Integration Test') {
+            steps {
+                sh 'mvn verify -DskipUnitTests -Parq-wildfly-swarm '
             }
         }
         stage('Publish') {

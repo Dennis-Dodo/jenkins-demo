@@ -1,32 +1,28 @@
 pipeline {
     agent any
-     tools {
-        // Install the Maven version configured as "M3" and add it to the path.
+    tools {
         jdk "JAVA_HOME"
     }
     stages {
         stage('Build') {
             steps {
                 git 'https://github.com/Dennis-Dodo/jenkins-demo.git'
-                bat './mvnw clean compile'
-                // bat '.\mvnw clean compile'
-                mvn 'clean install -DskipTests'
+                sh './mvnw clean compile'
+                sh './mvnw clean install -DskipTests'
             }
         }
         stage('Test') {
             steps {
-                bat './mvnw test'
-                // bat '.\mvnw test'
-            }
-            
-            stage('Unit Test') {
-                steps {
-                    mvn 'test'
+                sh './mvnw test'
+                stage('Unit Test') {
+                    steps {
+                        sh './mvnw test'
+                    }
                 }
-            }
-            stage('Integration Test') {
-                steps {
-                    mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
+                stage('Integration Test') {
+                    steps {
+                        sh './mvnw verify -DskipUnitTests -Parq-wildfly-swarm'
+                    }
                 }
             }
             post {
@@ -37,8 +33,7 @@ pipeline {
         }
         stage('Publish') {
             steps {
-                bat './mvnw package'
-                // bat '.\mvnw package'
+                sh './mvnw package'
             }
             post {
                 success {

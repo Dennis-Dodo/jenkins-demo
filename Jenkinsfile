@@ -19,17 +19,16 @@ pipeline {
                 // bat '.\mvnw test'
             }
             
-           stage('Unit Test') {
-        steps {
-            mvn 'test'
-        }
-    }
-    stage('Integration Test') {
-        steps {
-            mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
-        }
-    }
-}
+            stage('Unit Test') {
+                steps {
+                    mvn 'test'
+                }
+            }
+            stage('Integration Test') {
+                steps {
+                    mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
+                }
+            }
             post {
                 always {
                     junit 'target/surefire-reports/*.xml'

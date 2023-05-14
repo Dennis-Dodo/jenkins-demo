@@ -8,28 +8,26 @@ pipeline {
         stage('Build') {
             steps {
                 git 'https://github.com/Dennis-Dodo/jenkins-demo.git'
-                sh './mvnw clean compile'
-                sh './mvnw clean install -DskipTests'
+                bat './mvnw clean compile'
+                // bat '.\mvnw clean compile'
             }
         }
         stage('Test') {
             steps {
-                sh './mvnw test'
+                bat './mvnw test'
+                // bat '.\mvnw test'
             }
-        }
-        stage('Unit Test') {
-            steps {
-                sh 'mvn test'
-            }
-        }
-        stage('Integration Test') {
-            steps {
-                sh 'mvn verify -DskipUnitTests -Parq-wildfly-swarm '
+
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
             }
         }
         stage('Publish') {
             steps {
-                sh './mvnw package'
+                bat './mvnw package'
+                // bat '.\mvnw package'
             }
             post {
                 success {
@@ -39,3 +37,4 @@ pipeline {
         }
     }
 }
+
